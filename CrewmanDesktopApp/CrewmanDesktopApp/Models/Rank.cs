@@ -1,4 +1,4 @@
-namespace CrewmanDesktopApp.Models
+﻿namespace CrewmanDesktopApp.Models
 {
     /// <summary>Rang pomorca - odgovara retku tablice dbo.Ranks.</summary>
     public class Rank

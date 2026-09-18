@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -14,7 +14,10 @@ namespace CrewmanDesktopApp.Data
         Ready,
 
         /// <summary>Baza ne postoji ili u njoj nema tablica - treba pokrenuti skriptu.</summary>
-        Missing
+        Missing,
+
+        /// <summary>Baza postoji, ali trenutni korisnik nema pravo pristupa.</summary>
+        AccessDenied
     }
 
     /// <summary>
@@ -61,7 +64,28 @@ namespace CrewmanDesktopApp.Data
             }
             catch (SqlException ex) when (ex.Errors.Cast<SqlError>().Any(e => e.Number == ErrorCannotOpenDatabase))
             {
-                return DatabaseStatus.Missing;
+                // greška 4060 znači "baza ne postoji" ILI "postoji, ali korisnik nema pristup"
+                return DatabaseExistsOnServer() ? DatabaseStatus.AccessDenied : DatabaseStatus.Missing;
+            }
+        }
+
+        /// <summary>Preko baze master provjerava postoji li konfigurirana baza; ako ni master nije dostupan, pretpostavlja da ne postoji.</summary>
+        private static bool DatabaseExistsOnServer()
+        {
+            try
+            {
+                var builder = new SqlConnectionStringBuilder(Db.ConnectionString) { InitialCatalog = "master" };
+                using (var connection = new SqlConnection(builder.ConnectionString))
+                using (var command = new SqlCommand("SELECT DB_ID(@Name);", connection))
+                {
+                    command.Parameters.Add("@Name", System.Data.SqlDbType.NVarChar, 128).Value = ConfiguredDatabaseName;
+                    connection.Open();
+                    return command.ExecuteScalar() != DBNull.Value;
+                }
+            }
+            catch (SqlException)
+            {
+                return false;
             }
         }
 

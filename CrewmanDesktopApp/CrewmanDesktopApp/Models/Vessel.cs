@@ -1,4 +1,4 @@
-namespace CrewmanDesktopApp.Models
+﻿namespace CrewmanDesktopApp.Models
 {
     /// <summary>Brod - odgovara retku tablice dbo.Vessels.</summary>
     public class Vessel

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using CrewmanDesktopApp.Data;
@@ -39,6 +39,7 @@ namespace CrewmanDesktopApp.Forms
             catch (Exception ex)
             {
                 ShowError("Učitavanje podataka nije uspjelo.", ex);
+                UpdateButtons();
             }
         }
 
@@ -120,7 +121,13 @@ namespace CrewmanDesktopApp.Forms
         private void ClearFilters()
         {
             timerSearch.Stop();
+            ResetFilterEditors();
+            RefreshListSafe(null);
+            textSearch.Focus();
+        }
 
+        private void ResetFilterEditors()
+        {
             _suspendFilterEvents = true;
             try
             {
@@ -132,17 +139,17 @@ namespace CrewmanDesktopApp.Forms
             {
                 _suspendFilterEvents = false;
             }
-
-            RefreshListSafe(null);
-            textSearch.Focus();
         }
 
         // ------------------------------------------------------------------
         // Popis pomoraca
         // ------------------------------------------------------------------
 
-        /// <summary>Ponovno izvršava pretragu i osvježava tablicu; pokušava zadržati (ili postaviti) označeni redak.</summary>
-        private void RefreshList(int? selectId)
+        /// <summary>
+        /// Ponovno izvršava pretragu i osvježava tablicu; pokušava zadržati (ili postaviti) označeni redak.
+        /// Vraća true ako je traženi redak pronađen i označen.
+        /// </summary>
+        private bool RefreshList(int? selectId)
         {
             var focused = gridView.GetFocusedRow() as SeafarerListItem;
             int? idToSelect = selectId ?? (focused != null ? focused.Id : (int?)null);
@@ -154,13 +161,11 @@ namespace CrewmanDesktopApp.Forms
 
             gridControl.DataSource = items;
 
-            if (idToSelect.HasValue)
-            {
-                SelectRow(idToSelect.Value);
-            }
+            bool selected = idToSelect.HasValue && SelectRow(idToSelect.Value);
 
             UpdateStatus(items.Count);
             UpdateButtons();
+            return selected;
         }
 
         private void RefreshListSafe(int? selectId)
@@ -175,7 +180,7 @@ namespace CrewmanDesktopApp.Forms
             }
         }
 
-        private void SelectRow(int id)
+        private bool SelectRow(int id)
         {
             for (int rowHandle = 0; rowHandle < gridView.RowCount; rowHandle++)
             {
@@ -184,9 +189,10 @@ namespace CrewmanDesktopApp.Forms
                 {
                     gridView.FocusedRowHandle = rowHandle;
                     gridView.MakeRowVisible(rowHandle);
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         private void UpdateStatus(int count)
@@ -308,7 +314,13 @@ namespace CrewmanDesktopApp.Forms
                     // u formi je dodan novi rang ili brod - osvježi i filtre
                     LoadLookups();
                 }
-                RefreshList(form.SavedSeafarerId);
+
+                if (!RefreshList(form.SavedSeafarerId) && HasActiveFilter)
+                {
+                    // spremljeni pomorac ne prolazi trenutne filtre - makni ih da korisnik vidi što je spremio
+                    ResetFilterEditors();
+                    RefreshList(form.SavedSeafarerId);
+                }
             }
             catch (Exception ex)
             {
@@ -325,7 +337,7 @@ namespace CrewmanDesktopApp.Forms
             }
 
             DialogResult answer = XtraMessageBox.Show(this,
-                "Obrisati pomorca " + item.FullName + "?\n\nOva se radnja ne može poništiti.",
+                "Želite li obrisati pomorca \"" + item.FullName + "\"?\n\nOva se radnja ne može poništiti.",
                 "Brisanje pomorca", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (answer != DialogResult.Yes)
@@ -404,11 +416,21 @@ namespace CrewmanDesktopApp.Forms
                 RefreshListSafe(null);
                 e.Handled = true;
             }
-            else if (e.KeyCode == Keys.Escape && textSearch.ContainsFocus && HasActiveFilter)
+        }
+
+        /// <summary>
+        /// Esc u nekom od filtera (dok padajući popis nije otvoren) briše sve filtre.
+        /// Obrađuje se ovdje, prije nego što tipku vidi sam editor, jer DevExpress editori Esc koriste za vlastiti "undo".
+        /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape && layoutFilters.ContainsFocus && HasActiveFilter
+                && !lookupRank.IsPopupOpen && !lookupVessel.IsPopupOpen)
             {
                 ClearFilters();
-                e.Handled = true;
+                return true;
             }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void ShowError(string message, Exception ex)

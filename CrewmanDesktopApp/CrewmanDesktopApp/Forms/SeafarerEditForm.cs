@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -100,7 +100,7 @@ namespace CrewmanDesktopApp.Forms
                 _loading = false;
             }
 
-            UpdateEmbarkationState();
+            UpdateEmbarkationState(false);
         }
 
         private int? GetSelectedRankId()
@@ -118,8 +118,11 @@ namespace CrewmanDesktopApp.Forms
             return edit.EditValue is DateTime value ? value.Date : (DateTime?)null;
         }
 
-        /// <summary>Datum ukrcaja moguće je unijeti samo kada je odabran brod.</summary>
-        private void UpdateEmbarkationState()
+        /// <summary>
+        /// Datum ukrcaja moguće je unijeti samo kada je odabran brod.
+        /// Kada korisnik sam odabere brod, a datum je prazan, predlaže se današnji datum.
+        /// </summary>
+        private void UpdateEmbarkationState(bool userChangedVessel)
         {
             bool hasVessel = GetSelectedVesselId().HasValue;
             dateEmbarkation.Enabled = hasVessel;
@@ -128,7 +131,7 @@ namespace CrewmanDesktopApp.Forms
             {
                 dateEmbarkation.EditValue = null;
             }
-            else if (!_loading && GetDate(dateEmbarkation) == null)
+            else if (userChangedVessel && GetDate(dateEmbarkation) == null)
             {
                 dateEmbarkation.EditValue = DateTime.Today;
             }
@@ -138,7 +141,7 @@ namespace CrewmanDesktopApp.Forms
         {
             if (!_loading)
             {
-                UpdateEmbarkationState();
+                UpdateEmbarkationState(true);
             }
         }
 
@@ -190,8 +193,19 @@ namespace CrewmanDesktopApp.Forms
             {
                 int id = LookupRepository.AddVessel(name);
                 _vessels = LookupRepository.GetVessels();
-                BindVessels();
-                lookupVessel.EditValue = id;
+
+                // ponovno punjenje popisa ne smije obrisati već upisani datum ukrcaja
+                _loading = true;
+                try
+                {
+                    BindVessels();
+                    lookupVessel.EditValue = id;
+                }
+                finally
+                {
+                    _loading = false;
+                }
+                UpdateEmbarkationState(true);
                 LookupsChanged = true;
             }
             catch (Exception ex)
@@ -210,8 +224,14 @@ namespace CrewmanDesktopApp.Forms
             }
 
             name = name.Trim();
-            if (name.Length == 0 || name.Length > 100)
+            if (name.Length == 0)
             {
+                return null;
+            }
+
+            if (name.Length > 100)
+            {
+                XtraMessageBox.Show("Naziv može imati najviše 100 znakova.", title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return null;
             }
 

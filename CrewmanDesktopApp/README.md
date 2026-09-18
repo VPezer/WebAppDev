@@ -1,4 +1,4 @@
-# Crewman Desktop App
+﻿# Crewman Desktop App
 
 Windows desktop aplikacija za upravljanje pomorcima: pretraživanje, pregled u tablici te dodavanje, uređivanje i brisanje pomoraca.
 
@@ -11,13 +11,14 @@ Windows desktop aplikacija za upravljanje pomorcima: pretraživanje, pregled u t
 |---|---|
 | Pretraga po imenu, prezimenu, rangu i brodu | Jedno polje za pretragu (rezultati se filtriraju dok tipkate) + padajući filtri **Rang** i **Brod** |
 | Prikaz rezultata u tablici | Stupci: Ime, Prezime, Rang, Brod, Datum ukrcaja; klik na zaglavlje sortira |
-| Dodavanje pomorca | Gumb **Dodaj pomorca** (ili `Ctrl+N`, `Insert`) |
-| Uređivanje pomorca | Gumb **Uredi**, dvoklik na redak ili `Enter` |
-| Brisanje pomorca | Gumb **Obriši** ili tipka `Delete` (uz potvrdu) |
+| Dodavanje pomorca | Gumb **Dodaj pomorca** (ili `Ctrl+N`; `Insert` u tablici) |
+| Uređivanje pomorca | Gumb **Uredi**, dvoklik na redak ili `Enter` u tablici |
+| Brisanje pomorca | Gumb **Obriši** ili tipka `Delete` u tablici (uz potvrdu) |
 | Podaci o pomorcu | Ime, prezime, datum rođenja, nacionalnost, e-mail, rang, brod, datum ukrcaja |
 | Novi rang / brod | Gumb **+** uz padajući popis u dijalogu pomorca |
 
 Pretraga radi tako da se svaka upisana riječ mora pojaviti u imenu, prezimenu, nazivu ranga ili nazivu broda.
+Pretraga ne razlikuje velika i mala slova ni dijakritike (`peric` pronalazi Perića, `korcula` brod MT Korčula).
 Primjer: `horvat master` pronalazi Ivana Horvata s rangom Master; `adriatic` pronalazi sve ukrcane na *MV Adriatic Star*.
 
 Provjere pri unosu: obavezna polja (ime, prezime, datum rođenja, nacionalnost, rang), datum rođenja ne smije biti u budućnosti
@@ -84,9 +85,9 @@ a CHECK ograničenje osigurava da datum ukrcaja postoji samo uz brod. Svi upiti 
 
 | Tipka | Radnja |
 |---|---|
-| `Ctrl+N` / `Insert` | Novi pomorac |
-| `Enter` / dvoklik | Uredi označenog pomorca |
-| `Delete` | Obriši označenog pomorca |
+| `Ctrl+N` (bilo gdje) / `Insert` (u tablici) | Novi pomorac |
+| `Enter` / dvoklik (u tablici) | Uredi označenog pomorca |
+| `Delete` (u tablici) | Obriši označenog pomorca |
 | `Ctrl+F` | Fokus na polje za pretragu |
-| `Esc` (u polju za pretragu) | Očisti filtre |
+| `Esc` (u filterima) | Očisti sve filtre |
 | `F5` | Osvježi popis |

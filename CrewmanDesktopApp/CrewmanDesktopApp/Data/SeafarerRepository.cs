@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,6 +12,12 @@ namespace CrewmanDesktopApp.Data
     {
         /// <summary>Najveći broj riječi iz polja za pretragu koji se koristi u upitu.</summary>
         private const int MaxSearchTerms = 5;
+
+        /// <summary>
+        /// Usporedba neosjetljiva na velika/mala slova i dijakritike: "peric" pronalazi "Perić",
+        /// "korcula" pronalazi "Korčula" (zadane kolacije SQL Servera razlikuju č/c, š/s ...).
+        /// </summary>
+        private const string SearchCollation = " COLLATE Latin1_General_100_CI_AI LIKE ";
 
         private const string SelectListSql =
             "SELECT s.Id, s.FirstName, s.LastName, r.Name AS RankName, v.Name AS VesselName, s.EmbarkationDate\n" +
@@ -50,8 +56,8 @@ namespace CrewmanDesktopApp.Data
             {
                 string p = "@Term" + i;
                 conditions.Add(
-                    "(s.FirstName LIKE " + p + " OR s.LastName LIKE " + p +
-                    " OR r.Name LIKE " + p + " OR v.Name LIKE " + p + ")");
+                    "(s.FirstName" + SearchCollation + p + " OR s.LastName" + SearchCollation + p +
+                    " OR r.Name" + SearchCollation + p + " OR v.Name" + SearchCollation + p + ")");
                 parameters.Add(new SqlParameter(p, SqlDbType.NVarChar, 200)
                 {
                     Value = "%" + EscapeLike(terms[i]) + "%"

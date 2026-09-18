@@ -1,4 +1,4 @@
-using DevExpress.XtraEditors.Localization;
+﻿using DevExpress.XtraEditors.Localization;
 
 namespace CrewmanDesktopApp
 {

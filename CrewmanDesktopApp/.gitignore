@@ -6,5 +6,3 @@ obj/
 *.suo
 *.cache
 *.log
-# DevExpress licenca (generira Visual Studio)
-licenses.licx

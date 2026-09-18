@@ -1,4 +1,4 @@
-namespace CrewmanDesktopApp.Forms
+﻿namespace CrewmanDesktopApp.Forms
 {
     partial class SeafarerEditForm
     {

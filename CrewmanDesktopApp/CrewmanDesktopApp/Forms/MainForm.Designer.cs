@@ -1,4 +1,4 @@
-namespace CrewmanDesktopApp.Forms
+﻿namespace CrewmanDesktopApp.Forms
 {
     partial class MainForm
     {
@@ -24,6 +24,7 @@ namespace CrewmanDesktopApp.Forms
             this.btnEdit = new DevExpress.XtraEditors.SimpleButton();
             this.btnDelete = new DevExpress.XtraEditors.SimpleButton();
             this.layoutFilters = new System.Windows.Forms.TableLayoutPanel();
+            this.labelSearch = new DevExpress.XtraEditors.LabelControl();
             this.textSearch = new DevExpress.XtraEditors.TextEdit();
             this.lookupRank = new DevExpress.XtraEditors.LookUpEdit();
             this.lookupVessel = new DevExpress.XtraEditors.LookUpEdit();
@@ -90,44 +91,48 @@ namespace CrewmanDesktopApp.Forms
             this.btnAdd.Size = new System.Drawing.Size(140, 32);
             this.btnAdd.TabIndex = 0;
             this.btnAdd.Text = "Dodaj pomorca";
-            this.btnAdd.ToolTip = "Dodaj novog pomorca (Ctrl+N)";
+            this.btnAdd.ToolTip = "Dodaj novog pomorca (Ctrl+N ili Insert u tablici)";
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnEdit
             // 
+            this.btnEdit.Enabled = false;
             this.btnEdit.Location = new System.Drawing.Point(148, 0);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(110, 32);
             this.btnEdit.TabIndex = 1;
             this.btnEdit.Text = "Uredi";
-            this.btnEdit.ToolTip = "Uredi označenog pomorca (Enter ili dvoklik na redak)";
+            this.btnEdit.ToolTip = "Uredi označenog pomorca (dvoklik ili Enter u tablici)";
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnDelete
             // 
+            this.btnDelete.Enabled = false;
             this.btnDelete.Location = new System.Drawing.Point(266, 0);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(110, 32);
             this.btnDelete.TabIndex = 2;
             this.btnDelete.Text = "Obriši";
-            this.btnDelete.ToolTip = "Obriši označenog pomorca (Delete)";
+            this.btnDelete.ToolTip = "Obriši označenog pomorca (Delete u tablici)";
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // layoutFilters
             // 
             this.layoutFilters.AutoSize = true;
             this.layoutFilters.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.layoutFilters.ColumnCount = 4;
+            this.layoutFilters.ColumnCount = 5;
+            this.layoutFilters.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.layoutFilters.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.layoutFilters.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190F));
             this.layoutFilters.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190F));
             this.layoutFilters.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.layoutFilters.Controls.Add(this.textSearch, 0, 0);
-            this.layoutFilters.Controls.Add(this.lookupRank, 1, 0);
-            this.layoutFilters.Controls.Add(this.lookupVessel, 2, 0);
-            this.layoutFilters.Controls.Add(this.btnClearFilters, 3, 0);
+            this.layoutFilters.Controls.Add(this.labelSearch, 0, 0);
+            this.layoutFilters.Controls.Add(this.textSearch, 1, 0);
+            this.layoutFilters.Controls.Add(this.lookupRank, 2, 0);
+            this.layoutFilters.Controls.Add(this.lookupVessel, 3, 0);
+            this.layoutFilters.Controls.Add(this.btnClearFilters, 4, 0);
             this.layoutFilters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutFilters.Location = new System.Drawing.Point(10, 50);
             this.layoutFilters.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
@@ -137,17 +142,27 @@ namespace CrewmanDesktopApp.Forms
             this.layoutFilters.Size = new System.Drawing.Size(980, 32);
             this.layoutFilters.TabIndex = 1;
             // 
+            // labelSearch
+            // 
+            this.labelSearch.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelSearch.Location = new System.Drawing.Point(0, 8);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(48, 15);
+            this.labelSearch.TabIndex = 4;
+            this.labelSearch.Text = "Pretraga:";
+            // 
             // textSearch
             // 
             this.textSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textSearch.Location = new System.Drawing.Point(0, 4);
+            this.textSearch.Location = new System.Drawing.Point(56, 4);
             this.textSearch.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.textSearch.Name = "textSearch";
             this.textSearch.Properties.MaxLength = 100;
             this.textSearch.Properties.NullValuePrompt = "Pretraži po imenu, prezimenu, rangu ili brodu...";
-            this.textSearch.Properties.NullValuePromptShowForEmptyValue = true;
-            this.textSearch.Size = new System.Drawing.Size(492, 24);
+            this.textSearch.Size = new System.Drawing.Size(436, 24);
             this.textSearch.TabIndex = 0;
+            this.textSearch.ToolTip = "Upišite ime, prezime, rang ili brod - rezultati se filtriraju dok tipkate (Ctrl+F)";
             this.textSearch.EditValueChanged += new System.EventHandler(this.filter_EditValueChanged);
             // 
             // lookupRank
@@ -183,7 +198,7 @@ namespace CrewmanDesktopApp.Forms
             this.btnClearFilters.Size = new System.Drawing.Size(100, 32);
             this.btnClearFilters.TabIndex = 3;
             this.btnClearFilters.Text = "Očisti";
-            this.btnClearFilters.ToolTip = "Ukloni sve filtre i prikaži sve pomorce (Esc)";
+            this.btnClearFilters.ToolTip = "Ukloni sve filtre i prikaži sve pomorce (Esc u filterima)";
             this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
             // 
             // gridControl
@@ -314,6 +329,7 @@ namespace CrewmanDesktopApp.Forms
         private DevExpress.XtraEditors.SimpleButton btnEdit;
         private DevExpress.XtraEditors.SimpleButton btnDelete;
         private System.Windows.Forms.TableLayoutPanel layoutFilters;
+        private DevExpress.XtraEditors.LabelControl labelSearch;
         private DevExpress.XtraEditors.TextEdit textSearch;
         private DevExpress.XtraEditors.LookUpEdit lookupRank;
         private DevExpress.XtraEditors.LookUpEdit lookupVessel;

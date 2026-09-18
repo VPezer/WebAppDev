@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Globalization;
 using System.Threading;
@@ -61,6 +61,14 @@ namespace CrewmanDesktopApp
             if (status == DatabaseStatus.Ready)
             {
                 return true;
+            }
+
+            if (status == DatabaseStatus.AccessDenied)
+            {
+                ShowStartupError(
+                    "Baza '" + DatabaseInitializer.ConfiguredDatabaseName + "' postoji, ali trenutni Windows korisnik nema pravo pristupa.\n" +
+                    "Dodijelite korisniku pristup bazi u SQL Serveru ili u App.config upišite korisnika koji ga ima.", null);
+                return false;
             }
 
             if (!DatabaseInitializer.CanAutoCreate)
