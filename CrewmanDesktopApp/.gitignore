@@ -1,0 +1,10 @@
+# Visual Studio / MSBuild
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+# DevExpress licenca (generira Visual Studio)
+licenses.licx

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8B2F6C1E-4D3A-4F5B-9C7E-2A1D0E6F8B93}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CrewmanDesktopApp</RootNamespace>
+    <AssemblyName>CrewmanDesktopApp</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <!--
+    ===================================================================
+    DevExpress verzija
+    -------------------------------------------------------------------
+    Verzija instaliranih DevExpress WinForms komponenti prepoznaje se
+    automatski prema mapi C:\Program Files\DevExpress XX.Y\Components.
+    Ako želite, verziju možete i ručno zadati, npr.:
+
+        <DevExpressVersion>25.1</DevExpressVersion>
+
+    (u tom slučaju obrišite ili zakomentirajte automatsko prepoznavanje).
+    ===================================================================
+  -->
+  <PropertyGroup>
+    <DevExpressRoot Condition=" '$(DevExpressRoot)' == '' And '$(ProgramW6432)' != '' ">$(ProgramW6432)</DevExpressRoot>
+    <DevExpressRoot Condition=" '$(DevExpressRoot)' == '' ">$(ProgramFiles)</DevExpressRoot>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 26.2\Components\Bin\Framework') ">26.2</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 26.1\Components\Bin\Framework') ">26.1</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 25.2\Components\Bin\Framework') ">25.2</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 25.1\Components\Bin\Framework') ">25.1</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 24.2\Components\Bin\Framework') ">24.2</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 24.1\Components\Bin\Framework') ">24.1</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 23.2\Components\Bin\Framework') ">23.2</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 23.1\Components\Bin\Framework') ">23.1</DevExpressVersion>
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' And Exists('$(DevExpressRoot)\DevExpress 22.2\Components\Bin\Framework') ">22.2</DevExpressVersion>
+    <!-- Nije pronađena instalacija u Program Files: pretpostavi verziju (sklopovi se tada traže u GAC-u). -->
+    <DevExpressVersion Condition=" '$(DevExpressVersion)' == '' ">25.1</DevExpressVersion>
+    <DevExpressBinPath>$(DevExpressRoot)\DevExpress $(DevExpressVersion)\Components\Bin\Framework</DevExpressBinPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- DevExpress WinForms komponente (GridControl, TextEdit, LookUpEdit, DateEdit, XtraForm, XtraMessageBox ...) -->
+    <Reference Include="DevExpress.Data.v$(DevExpressVersion)">
+      <HintPath>$(DevExpressBinPath)\DevExpress.Data.v$(DevExpressVersion).dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.Desktop.v$(DevExpressVersion)">
+      <HintPath>$(DevExpressBinPath)\DevExpress.Data.Desktop.v$(DevExpressVersion).dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Drawing.v$(DevExpressVersion)">
+      <HintPath>$(DevExpressBinPath)\DevExpress.Drawing.v$(DevExpressVersion).dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v$(DevExpressVersion).Core">
+      <HintPath>$(DevExpressBinPath)\DevExpress.Printing.v$(DevExpressVersion).Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v$(DevExpressVersion)">
+      <HintPath>$(DevExpressBinPath)\DevExpress.Utils.v$(DevExpressVersion).dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v$(DevExpressVersion)">
+      <HintPath>$(DevExpressBinPath)\DevExpress.XtraEditors.v$(DevExpressVersion).dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v$(DevExpressVersion)">
+      <HintPath>$(DevExpressBinPath)\DevExpress.XtraGrid.v$(DevExpressVersion).dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CroatianEditorsLocalizer.cs" />
+    <Compile Include="Data\DatabaseInitializer.cs" />
+    <Compile Include="Data\Db.cs" />
+    <Compile Include="Data\LookupRepository.cs" />
+    <Compile Include="Data\SeafarerRepository.cs" />
+    <Compile Include="Forms\LookupHelper.cs" />
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SeafarerEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SeafarerEditForm.Designer.cs">
+      <DependentUpon>SeafarerEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Rank.cs" />
+    <Compile Include="Models\Seafarer.cs" />
+    <Compile Include="Models\SeafarerListItem.cs" />
+    <Compile Include="Models\Vessel.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <!-- SQL skripta se ugrađuje u .exe kako bi aplikacija mogla sama kreirati bazu pri prvom pokretanju -->
+    <EmbeddedResource Include="..\Database\CrewmanDatabase.sql">
+      <Link>Database\CrewmanDatabase.sql</Link>
+      <LogicalName>CrewmanDatabase.sql</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
