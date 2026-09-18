@@ -22,7 +22,8 @@ Pretraga ne razlikuje velika i mala slova ni dijakritike (`peric` pronalazi Peri
 Primjer: `horvat master` pronalazi Ivana Horvata s rangom Master; `adriatic` pronalazi sve ukrcane na *MV Adriatic Star*.
 
 Provjere pri unosu: obavezna polja (ime, prezime, datum rođenja, nacionalnost, rang), datum rođenja ne smije biti u budućnosti
-i pomorac mora imati najmanje 16 godina, e-mail mora biti ispravnog oblika, a datum ukrcaja se unosi samo ako je odabran brod.
+i pomorac mora imati najmanje 16 godina, e-mail mora biti ispravnog oblika, a datum ukrcaja je obavezan (i nakon datuma rođenja)
+čim je odabran brod; bez broda se ne unosi.
 
 ## Preduvjeti
 

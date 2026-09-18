@@ -261,10 +261,8 @@ namespace CrewmanDesktopApp.Forms
         {
             using (var form = new SeafarerEditForm(null, _ranks, _vessels))
             {
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    AfterSave(form);
-                }
+                DialogResult result = form.ShowDialog(this);
+                AfterDialog(form, result);
             }
         }
 
@@ -298,21 +296,25 @@ namespace CrewmanDesktopApp.Forms
 
             using (var form = new SeafarerEditForm(seafarer, _ranks, _vessels))
             {
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    AfterSave(form);
-                }
+                DialogResult result = form.ShowDialog(this);
+                AfterDialog(form, result);
             }
         }
 
-        private void AfterSave(SeafarerEditForm form)
+        /// <summary>Nakon zatvaranja dijaloga osvježava šifrarnike (ako je dodan rang/brod) i popis (ako je pomorac spremljen).</summary>
+        private void AfterDialog(SeafarerEditForm form, DialogResult result)
         {
             try
             {
                 if (form.LookupsChanged)
                 {
-                    // u formi je dodan novi rang ili brod - osvježi i filtre
+                    // u dijalogu je dodan novi rang ili brod (i kad se odustalo od pomorca) - osvježi popise i filtre
                     LoadLookups();
+                }
+
+                if (result != DialogResult.OK)
+                {
+                    return;
                 }
 
                 if (!RefreshList(form.SavedSeafarerId) && HasActiveFilter)

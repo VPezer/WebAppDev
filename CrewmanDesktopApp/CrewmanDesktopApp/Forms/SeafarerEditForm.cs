@@ -244,7 +244,8 @@ namespace CrewmanDesktopApp.Forms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput())
+            // Enter (AcceptButton) ne pomiče fokus, pa editor s maskom (datum) još nije "predao" upisani tekst u EditValue
+            if (!PostPendingEdits() || !ValidateInput())
             {
                 return;
             }
@@ -278,6 +279,21 @@ namespace CrewmanDesktopApp.Forms
             SavedSeafarerId = _seafarer.Id;
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        /// <summary>Prisiljava sve editore da upisani tekst prenesu u EditValue (isto što se događa pri gubitku fokusa).</summary>
+        private bool PostPendingEdits()
+        {
+            BaseEdit[] editors = { textFirstName, textLastName, dateOfBirth, comboNationality, textEmail, lookupRank, lookupVessel, dateEmbarkation };
+            foreach (BaseEdit editor in editors)
+            {
+                if (!editor.DoValidate())
+                {
+                    editor.Focus();
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>Provjerava unos; kraj svakog neispravnog polja prikazuje ikonu s porukom i vraća false.</summary>

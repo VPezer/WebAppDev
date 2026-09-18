@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Threading;
@@ -81,8 +82,8 @@ namespace CrewmanDesktopApp
             }
 
             DialogResult answer = XtraMessageBox.Show(
-                "Baza podataka '" + DatabaseInitializer.ScriptDatabaseName + "' još ne postoji.\n\n" +
-                "Želite li je sada kreirati zajedno s demo podacima?",
+                "Baza podataka '" + DatabaseInitializer.ScriptDatabaseName + "' još ne postoji ili je prazna.\n\n" +
+                "Želite li je sada pripremiti (baza, tablice i demo podaci)?",
                 "Crewman - prvo pokretanje",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
@@ -129,7 +130,13 @@ namespace CrewmanDesktopApp
         {
             try
             {
-                return Db.ConnectionString;
+                // lozinka (ako se koristi SQL prijava) ne smije završiti u poruci na ekranu
+                var builder = new SqlConnectionStringBuilder(Db.ConnectionString);
+                if (builder.Password.Length > 0)
+                {
+                    builder.Password = "*****";
+                }
+                return builder.ConnectionString;
             }
             catch (Exception ex)
             {
